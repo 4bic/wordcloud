@@ -9,3 +9,50 @@ library("tm")
 library("SnowballC")
 library("wordcloud")
 library("RColorBrewer")
+
+#read file
+filePath <- "man_in_arena.txt" 
+text <- readLines(filePath)
+
+#load data
+docs <- Corpus(VectorSource(text))
+
+#inspect contents of the document
+inspect(docs)
+
+#replace "/, @, |" with space
+toSpace <- content_transformer(function(x, pattern) gsub(pattern, " ", x))
+
+#remove unnecessary whitespaces
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+docs <- tm_map(docs, toSpace, "/")
+
+#remove common words(stop words) & TEXTSTEMMING
+#convert to lowercase
+docs <- tm_map(docs, content_transformer(tolower))
+
+#remove numbers
+docs <- tm_map(docs, removeNumbers)
+
+#remove english common stop words
+docs <- tm_map(docs, removeWords, stopwords("english"))
+
+#remove own / undesired stopword
+docs <- tm_map(docs, removeWords, c("Kenya", "We"))
+
+#remove punctuations
+docs <- tm_map(docs, removePunctuations)
+
+#eliminate extra white spaces
+docs <- tm_map(docs, stripWhitespace)
+ #text stemming
+#docs <- tm_map(docs, stemDocument)
+
+
+
+
+
+
+
+
