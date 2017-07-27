@@ -11,7 +11,7 @@ library("wordcloud")
 library("RColorBrewer")
 
 #read file
-filePath <- "man_in_arena.txt" 
+filePath <- "/home/wordcloud/man_in_arena.txt"
 text <- readLines(filePath)
 
 #load data
@@ -42,12 +42,28 @@ docs <- tm_map(docs, removeWords, stopwords("english"))
 docs <- tm_map(docs, removeWords, c("Kenya", "We"))
 
 #remove punctuations
-docs <- tm_map(docs, removePunctuations)
+docs <- tm_map(docs, removePunctuation)
 
 #eliminate extra white spaces
 docs <- tm_map(docs, stripWhitespace)
  #text stemming
 #docs <- tm_map(docs, stemDocument)
+
+#build a term-document matrix
+
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m), decreasing = TRUE)
+d <- data.frame(word = names(v), freq=v)
+head(d, 10)
+
+#generate word cloud
+set.seed(1200)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words = 200, random.orders=FALSE, rot.per=0.35,
+          colors=brewer.pal(20, "Dark1"))
+
+
 
 
 
