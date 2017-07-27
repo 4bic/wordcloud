@@ -61,7 +61,7 @@ head(d, 10)
 set.seed(1200)
 wordcloud(words = d$word, freq = d$freq, min.freq = 1,
           max.words = 200, random.orders=FALSE, rot.per=0.35,
-          colors=brewer.pal(20, "Dark1"))
+          colors=brewer.pal(9, "RdPu"))
 
 
 
